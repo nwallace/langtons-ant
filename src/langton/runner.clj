@@ -1,6 +1,7 @@
 (ns langton.runner
   (:require [langton.ant :as ant]
-            [langton.grid :as grid]))
+            [langton.grid :as grid]
+            [langton.prerenderer :refer [world->cells]]))
 
 (defn- expand-if-necessary [grid [new-x new-y]]
   (let [[min-x max-x] ((juxt first last) (grid/x-coords grid))
@@ -22,3 +23,9 @@
                  :grid (-> grid
                            (grid/color next-color (:pos ant))
                            (expand-if-necessary (:pos new-ant))))))
+
+(defn run-simulation [render-fn first-world]
+  (letfn [(render-world [world]
+            (-> world world->cells render-fn)
+            world)]
+    (iterate #(doto (run %) render-world) (render-world first-world))))

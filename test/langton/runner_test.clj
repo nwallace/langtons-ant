@@ -7,6 +7,7 @@
 
 (def rules (rules/create "RL"))
 (def north-ant (ant/create :faces :north))
+(def west-ant (ant/create :faces :west))
 (def white-1x1 (grid/create))
 (def grey-1x1  (-> (grid/create) (grid/color :grey [0 0])))
 (def white-2x2 (-> (grid/create)
@@ -63,3 +64,19 @@
 
   (fact "it doesn't alter the rules"
     (:rules (run {:ant north-ant :grid white-1x1 :rules rules})) => rules))
+
+(facts "about running a whole simulation"
+  (let [simulate (fn [iterations]
+                   (let [rendered-screen (atom [])
+                         fake-renderer (partial reset! rendered-screen)]
+                     (doall (take iterations
+                           (run-simulation fake-renderer {:ant west-ant
+                                                          :grid white-1x1
+                                                          :rules rules})))
+                     @rendered-screen))]
+    (fact "it yields the pre-rendered world to the provided render function"
+      (simulate 1) => [[{:color :white :ant :west}]]
+      (simulate 2) => [[{:color :white :ant :north}]
+                       [{:color :grey}]]
+      (simulate 3) => [[{:color :grey} {:color :white :ant :east}]
+                       [{:color :grey} {:color :white}]])))
