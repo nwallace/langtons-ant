@@ -1,5 +1,5 @@
 (ns langton.rules
-  (:require [clojure.string :as string]))
+  #? (:clj (:require [clojure.string :as string])))
 
 (def all-colors [:white :grey :green :blue :red :yellow :magenta :cyan :black])
 (def directions [:north :east :south :west])
@@ -22,5 +22,6 @@
 
 (defn create [rule-string]
   (-> rule-string
-      (string/split #"")
+      #? (:clj (string/split #"")
+          :cljs (.split ""))
       chars->rule-set))

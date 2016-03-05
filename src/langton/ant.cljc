@@ -15,7 +15,7 @@
 
 (defn turn [{:keys [faces] :as ant} left-or-right]
   {:pre [(left-or-right #{:left :right})]}
-  (let [current-index (.indexOf directions faces)
+  (let [current-index (.indexOf (to-array directions) faces)
         inc-or-dec (left-or-right {:left inc :right dec})
         next-index (mod (inc-or-dec current-index) (count directions))]
     (assoc ant :faces (get directions next-index))))
