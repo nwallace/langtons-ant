@@ -7,23 +7,10 @@
 
 (enable-console-print!)
 
-(defonce app-state (r/atom {:grid []}))
-
-(defn cell [{:keys [color ant] :as cell} i]
-  [:div.cell
-   {:key i
-    :class (str "cell-"
-                (name color)
-                (when ant (str " cell-ant cell-ant-" (name ant))))}])
-
-(defn row [row i]
-  [:div.row {:key i} (map cell row (range))])
-
-(defn root []
-  (let [state @app-state]
-    [:div
-     [:h1 "Langton's Ant"]
-     [:div.grid (map row (:grid state) (range))]]))
+(defonce app-state (r/atom {:controls {:rules "RL"
+                                       :steps 53
+                                       :interval 100}
+                            :grid []}))
 
 (defn render-simulation [steps simulation interval]
   (if (pos? steps)
@@ -42,6 +29,43 @@
                                         :grid (grid/create)
                                         :rules (rules/create rules)})
       interval)))
+
+(defn new-run [event]
+  (.preventDefault event)
+  (let [{{:keys [rules steps interval]} :controls} @app-state]
+    (run rules steps interval)))
+
+(defn state-update
+  ([value-path] (state-update value-path identity))
+  ([value-path transform]
+   (fn [event]
+     (let [new-val (.. event -target -value)]
+       (swap! app-state assoc-in value-path (transform new-val))))))
+
+(defn cell [{:keys [color ant] :as cell} i]
+  [:div.cell
+   {:key i
+    :class (str "cell-"
+                (name color)
+                (when ant (str " cell-ant cell-ant-" (name ant))))}])
+
+(defn row [row i]
+  [:div.row {:key i} (map cell row (range))])
+
+(defn controls []
+  (let [{{:keys [rules steps interval]} :controls} @app-state]
+    [:form {:on-submit new-run}
+     [:input {:type "text" :value rules :on-change (state-update [:controls :rules])}]
+     [:input {:type "number" :value steps :on-change (state-update [:controls :steps] js/parseInt)}]
+     [:input {:type "number" :value interval :on-change (state-update [:controls :interval] js/parseInt)}]
+     [:input {:type "submit" :value "Go!"}]]))
+
+(defn root []
+  (let [state @app-state]
+    [:div
+     [:h1 "Langton's Ant"]
+     [:div.controls (controls)]
+     [:div.grid (map row (:grid state) (range))]]))
 
 (defn main []
   (println "Loaded")
