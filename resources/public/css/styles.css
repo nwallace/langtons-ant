@@ -36,7 +36,7 @@ section {
   width: 20px;
 }
 .cell + .cell {
-  border-left: none;
+  margin-left: -1px;
 }
 
 .cell-white   { background-color: #ffffff; }
@@ -53,13 +53,12 @@ section {
 .cell-navy    { background-color: #000040; }
 .cell-black   { background-color: #333333; }
 
-.cell-ant:before {
-  color: red;
-  font-weight: bold;
-  position: absolute;
+.cell-ant {
+  background: url("/images/ant.svg") no-repeat;
+  background-size: 28px;
+  background-position: -5px -5px;
 }
 
-.cell-ant-north:before { content: "^"; top:  3px; left: 2px; }
-.cell-ant-south:before { content: "v"; top: -2px; left: 4px; }
-.cell-ant-east:before  { content: ">"; top: -1px; left: 2px; }
-.cell-ant-west:before  { content: "<"; top: -1px; left: 2px; }
+.cell-ant-east  { transform: rotate(90deg); }
+.cell-ant-south { transform: rotate(180deg); }
+.cell-ant-west  { transform: rotate(270deg); }

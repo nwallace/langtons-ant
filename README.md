@@ -33,3 +33,7 @@ Then visit http://localhost:3449
 The project uses [Midje](https://github.com/marick/Midje/).
 
 `lein midje` will run all tests.
+
+### Credits
+
+[Ant image](https://thenounproject.com/lerele/collection/bugs/?i=156657) created by Lele Saa of The Noun Project, Creative Commons License 3.0.
