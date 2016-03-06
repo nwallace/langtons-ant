@@ -1,0 +1,6 @@
+tmux split-window -v
+tmux resize-pane -D 10
+tmux send-keys "rlwrap lein figwheel" C-m
+
+tmux select-pane -U
+tmux send-keys "v src/**/core.clj" C-m
