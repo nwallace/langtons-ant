@@ -55,9 +55,15 @@
 (defn controls []
   (let [{{:keys [rules steps interval]} :controls} @app-state]
     [:form {:on-submit new-run}
-     [:input {:type "text" :value rules :on-change (state-update [:controls :rules])}]
-     [:input {:type "number" :value steps :on-change (state-update [:controls :steps] js/parseInt)}]
-     [:input {:type "number" :value interval :on-change (state-update [:controls :interval] js/parseInt)}]
+     [:input {:type "text" :pattern "[RL]+" :max-length (count rules/all-colors)
+              :value rules
+              :on-change (state-update [:controls :rules])}]
+     [:input {:type "number" :min 0
+              :value steps
+              :on-change (state-update [:controls :steps] js/parseInt)}]
+     [:input {:type "number" :min 0
+              :value interval
+              :on-change (state-update [:controls :interval] js/parseInt)}]
      [:input {:type "submit" :value "Go!"}]]))
 
 (defn root []

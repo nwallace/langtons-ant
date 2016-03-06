@@ -1,7 +1,8 @@
 (ns langton.rules
   #? (:clj (:require [clojure.string :as string])))
 
-(def all-colors [:white :grey :green :blue :red :yellow :magenta :cyan :black])
+(def all-colors [:white :grey :green :blue :red :yellow :magenta :cyan
+                 #?@(:cljs [:orange :lime :pink :navy]) :black])
 (def directions [:north :east :south :west])
 
 (defn- make-color-sequence [size]
