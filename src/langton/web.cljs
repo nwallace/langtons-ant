@@ -10,7 +10,8 @@
 (defonce app-state (r/atom {:controls {:rules "RL"
                                        :steps 53
                                        :interval 100}
-                            :grid []}))
+                            :grid []
+                            :current-step 0}))
 
 (defn render-simulation [steps simulation interval]
   (if (pos? steps)
@@ -22,7 +23,9 @@
 (defn run [rules steps interval]
   (println "Running. Rules:" rules "Steps:" steps "Interval:" interval)
   (letfn [(render-fn [prerendered-world]
-            (swap! app-state assoc :grid prerendered-world))]
+            (let [current-step (:current-step @app-state)]
+              (swap! app-state assoc :grid prerendered-world
+                                     :current-step (inc current-step))))]
     (render-simulation
       steps
       (runner/run-simulation render-fn {:ant (ant/create)
@@ -33,6 +36,7 @@
 (defn new-run [event]
   (.preventDefault event)
   (let [{{:keys [rules steps interval]} :controls} @app-state]
+    (swap! app-state assoc :current-step 0)
     (run rules steps interval)))
 
 (defn state-update
@@ -71,6 +75,9 @@
     [:div
      [:h1 "Langton's Ant"]
      [:div.controls (controls)]
+     [:div.progress
+      [:progress {:value (:current-step state)
+                  :max (get-in state [:controls :steps])}]]
      [:div.grid (map row (:grid state) (range))]]))
 
 (defn main []
