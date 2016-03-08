@@ -1,0 +1,64 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+#app {
+  margin: 0 auto;
+}
+
+label {
+  display: inline-block;
+  width: 120px;
+}
+
+section {
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+.input-group {
+  text-align: left;
+}
+
+.row {
+  height: 20px;
+}
+.row + .row {
+  margin-top: -1px;
+}
+
+.cell {
+  border: 1px solid #333;
+  display: inline-block;
+  height: 20px;
+  position: relative;
+  width: 20px;
+}
+.cell + .cell {
+  margin-left: -1px;
+}
+
+.cell-white   { background-color: #ffffff; }
+.cell-grey    { background-color: #b7b7b7; }
+.cell-green   { background-color: #008751; }
+.cell-blue    { background-color: #156fa9; }
+.cell-red     { background-color: #800020; }
+.cell-yellow  { background-color: #fcd116; }
+.cell-magenta { background-color: #967aa1; }
+.cell-cyan    { background-color: #b9c5cb; }
+.cell-orange  { background-color: #ffa500; }
+.cell-lime    { background-color: #66ff66; }
+.cell-pink    { background-color: #ffc0cb; }
+.cell-navy    { background-color: #000040; }
+.cell-black   { background-color: #333333; }
+
+.cell-ant {
+  background: url("/images/ant.svg") no-repeat;
+  background-size: 28px;
+  background-position: -5px -5px;
+}
+
+.cell-ant-east  { transform: rotate(90deg); }
+.cell-ant-south { transform: rotate(180deg); }
+.cell-ant-west  { transform: rotate(270deg); }

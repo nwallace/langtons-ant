@@ -1,3 +1,6 @@
 .nrepl-port
 .lein-repl-history
 target/
+compiled/
+resources/public/js/langton.js
+*.log
