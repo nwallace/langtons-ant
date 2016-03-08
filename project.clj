@@ -4,10 +4,12 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/tools.cli "0.3.3"]
                  [reagent "0.6.0-alpha"]
+                 [posh "0.3.4.1"]
+                 [datascript "0.15.0"]
                  [clojure-term-colors "0.1.0-SNAPSHOT"]]
 
   :profiles {:dev {:dependencies [[midje "1.8.3"]]
-                   :plugins [[lein-midje "3.1.3"]
+                   :plugins [[lein-midje "3.2"]
                              [lein-figwheel "0.5.0-6"]]}}
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]

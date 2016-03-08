@@ -1,11 +1,24 @@
 (ns langton.web
   [:require [reagent.core :as r]
+            [datascript.core :as d]
+            [posh.core :refer [pull q db-tx pull-tx q-tx after-tx! transact! posh!]]
             [langton.grid :as grid]
             [langton.ant :as ant]
             [langton.rules :as rules]
             [langton.runner :as runner]])
 
 (enable-console-print!)
+
+(def conn (d/create-conn))
+
+(posh! conn)
+
+;(transact! conn [[:db/add 1 :controls/rules "RL"]
+;                 [:db/add 1 :controls/steps 53]
+;                 [:db/add 1 :controls/interval 100]
+;                 [:db/add 2 :grid []]
+;                 [:db/add 3 :current-step 0]
+;                 [:db/add 4 :running? false]])
 
 (defonce app-state (r/atom {:controls {:rules "RL"
                                        :steps 53
