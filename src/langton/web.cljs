@@ -11,14 +11,16 @@
                                        :steps 53
                                        :interval 100}
                             :grid []
-                            :current-step 0}))
+                            :current-step 0
+                            :running? false}))
 
 (defn render-simulation [steps simulation interval]
   (if (pos? steps)
     (do
       (first simulation) ; realize next step
       (js/setTimeout #(render-simulation (dec steps) (drop 1 simulation) interval)
-                     interval))))
+                     interval))
+    (swap! app-state assoc :running? false)))
 
 (defn run [rules steps interval]
   (println "Running. Rules:" rules "Steps:" steps "Interval:" interval)
@@ -36,7 +38,7 @@
 (defn new-run [event]
   (.preventDefault event)
   (let [{{:keys [rules steps interval]} :controls} @app-state]
-    (swap! app-state assoc :current-step 0)
+    (swap! app-state assoc :current-step 0 :running? true)
     (run rules steps interval)))
 
 (defn state-update
@@ -57,18 +59,22 @@
   [:div.row {:key i} (map cell row (range))])
 
 (defn controls []
-  (let [{{:keys [rules steps interval]} :controls} @app-state]
+  (let [state @app-state
+        {{:keys [rules steps interval]} :controls running? :running?} state]
     [:form {:on-submit new-run}
      [:input {:type "text" :pattern "[RL]+" :max-length (count rules/all-colors)
+              :disabled running?
               :value rules
               :on-change (state-update [:controls :rules])}]
      [:input {:type "number" :min 0
+              :disabled running?
               :value steps
               :on-change (state-update [:controls :steps] js/parseInt)}]
      [:input {:type "number" :min 0
+              :disabled running?
               :value interval
               :on-change (state-update [:controls :interval] js/parseInt)}]
-     [:input {:type "submit" :value "Go!"}]]))
+     [:input {:type "submit" :disabled running? :value "Go!"}]]))
 
 (defn root []
   (let [state @app-state]
@@ -76,8 +82,10 @@
      [:h1 "Langton's Ant"]
      [:div.controls (controls)]
      [:div.progress
-      [:progress {:value (:current-step state)
-                  :max (get-in state [:controls :steps])}]]
+      [:progress (if (:running? state)
+                   {:value (:current-step state)
+                    :max (get-in state [:controls :steps])}
+                   {:value 1 :max 1})]]
      [:div.grid (map row (:grid state) (range))]]))
 
 (defn main []
